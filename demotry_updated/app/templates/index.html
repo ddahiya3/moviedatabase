@@ -14,23 +14,32 @@
   <body>
     <h4><strong>Welcome {{username}}</strong></h4>
     <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-            <form role="form" action="{{ url_for('profile', username = username) }}" method = "post">
-                <div class="form-group">
+	    <div class="row">
+		    <div class="col-md-12">
+          <form role="form" action="{{ url_for('profile', username = username) }}" method = "post">
+            <div class="form-group">
                     
-                    <label for="movieName">
-                        Movie Name
-                    </label>
-                    <input type="text" class="form-control" id="movieNameInput" name = "movieName">
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    Search
+              <label for="userInput">
+                        Search...
+              </label>
+              <input type="text" class="form-control" id="movieNameInput" name = "userInput">
+            </div>
+              <button type="submit" class="btn btn-primary" name = "submit" value = "movieSearch">
+                    SEARCH MOVIE
+              </button>
+              <div> 
+                <button type="submit" class="btn btn-secondary" name = "submit" value = "ratings">
+                  VIEW CURRENT RATINGS
+                </button> 
+              </div>
+              <div>
+                <button type="submit" class="btn btn-secondary" name = "submit" value = "recommend">
+                  RECOMMEND MOVIES
                 </button>
-            </form>
-		</div>
-	</div>
-</div>
-
+              </div>
+          </form>
+		    </div>
+	    </div>
+    </div>
   </body>
 </html>
