@@ -17,8 +17,15 @@ def homepage():
 @app.route('/profile/<username>', methods = ["GET", "POST"])
 def profile(username) :
     if request.method == "POST" :
-        moviename = request.form.get("movieName")
-        return redirect(url_for('search_movie', movieName = moviename))              
+        if request.form["submit"] == "movieSearch" :
+            moviename = request.form.get("userInput")
+            return redirect(url_for('search_movie', movieName = moviename))   
+        elif request.form["submit"] == "ratings" :
+            pass
+            #do something
+        elif request.form["submit"] == "recommend" :
+            pass
+            #do something           
     return render_template("index.html", username = username)
 
 @app.route('/search/<movieName>')          #TODO implement from here
