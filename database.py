@@ -1,16 +1,6 @@
 import random
 from app import db
 
-# def check_login_details(uname, pwd): # 1 for correct, 0 for wrong
-#     if uname == "admin" and pwd == "admin" :
-#         return True
-#     else :
-#         return False
-
-def fake_movies() :
-    movies = [{'name' : ' Avatar', 'idx' : '1'}, {'name' : 'Batman', 'idx' : '2'}]
-    return movies
-
 def check_login_details(uname, pwd): # 1 for correct, 0 for wrong
     conn = db.connect()
     query = f'select COUNT(Username) from USER WHERE Username = "{uname}" AND Password = "{pwd}";'
@@ -69,13 +59,53 @@ def delete_rating_query(uname, moviename):
     return
 
 def update_rating_query(uname, moviename, new_score):
+    #TODO: fix toy story
     conn = db.connect()
     query = f'update RATING SET Score = {new_score} WHERE Username = "{uname}" AND Title = "{moviename}";'
     conn.execute(query)
     conn.close()
     return
 
-#TODO: error handling for add new user
+def search_movie(movie_name):
+    conn = db.connect()
+    query = f'Select Title, Genres, Runtime, avg_score from MOVIE natural join (Select Title, AVG(Score) as avg_score from RATING GROUP BY Title) as rat WHERE Title LIKE "%%{movie_name}%%";'
+    results = conn.execute(query).fetchall()
+    conn.close()
+    return results
+
+def recommend_db(uname, friend_uname):
+    conn = db.connect()
+    check_query = f'SELECT COUNT(*) FROM RATING WHERE Username="{friend_uname}";'
+    rating_count = conn.execute(check_query).fetchall()[0][0]
+    if rating_count == 0:
+        raise Exception("Friend username doesn't exist in database")
+    q1 = f'call recommend1("{uname}", "{friend_uname}");'
+    conn.execute(q1)
+    q2 = f'call recommend2();'
+    conn.execute(q2)
+    query = f'SELECT DISTINCT * from TORETURN;'
+    results = conn.execute(query).fetchall()
+    conn.close()
+    return results
+
+def create_rating_query(uname, movie_name, score):
+    conn = db.connect()
+    query = f'INSERT INTO RATING VALUES("{movie_name}", "{uname}", {score});'
+    conn.execute(query)
+    q2 = f'SELECT @a;'
+    trigger_error = conn.execute(q2).fetchall()[0][0]
+    if trigger_error == 1:
+        q3 = f'DELETE FROM RATING WHERE Title = "{movie_name}" AND Username = "{uname}";'
+        conn.execute(q3)
+        conn.close()
+        raise Exception('Rating value outside range')
+    conn.close()
+    return
+
+
 #TODO: remove all prints
+#TODO: error handling for add new user
 #TODO: error handling for all querries
+#TODO: handle username password being less than 30 letters
+#TODO: app name html heading
 

@@ -36,7 +36,6 @@ def request_loader(request):
 
     user = User()
     user.id = uname
-    user.is_authenticated = True # TODO: maybe unecessary
     return user
 
 app  = Flask(__name__)
@@ -126,7 +125,7 @@ def aq1():
 
     req_result = db_helper.advanced_query_1(director_letter1, director_letter2)
     df = pd.DataFrame(req_result, columns=["Movie Name", "Director"])
-    return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
+    return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values, table_heading="Movies by given directors")
 
 @app.route('/aq2', methods =["GET", "POST"])
 @login_required
@@ -138,7 +137,7 @@ def aq2():
 
     req_result = db_helper.advanced_query_2(director_name)
     df = pd.DataFrame(req_result, columns=["Movie Name", "Director", "Duration"])
-    return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
+    return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values, table_heading="Longest runtime movie by given director")
 
 @app.route('/ratings', methods =["GET"])
 @login_required
@@ -162,7 +161,45 @@ def update_rating(movie_name):
     db_helper.update_rating_query(current_user.id, movie_name, new_rating)
     return redirect(url_for('ratings'))
 
+@app.route('/search', methods =["GET", "POST"])
+@login_required
+def search():
+    if request.method == "GET":
+        return render_template("search.html", username=current_user.id)
+        
+    movie_name = request.form.get("movieName")
+    req_result = db_helper.search_movie(movie_name)
+    print(req_result)
+    print(type(req_result))
+    return render_template("search_result.html", results=req_result)
 
+@app.route('/recommend', methods =["GET", "POST"])
+@login_required
+def recommend_sp():
+    if request.method == "GET":
+        return render_template("recommend.html")
+
+    friend_uname = request.form.get("uname")
+    try:
+        req_result = db_helper.recommend_db(str(current_user.id), str(friend_uname))
+    except:
+        return "The friend username you entered doesn't exist or you have not rated enough movies for recommendation to work. Please go back."
+    df = pd.DataFrame(req_result, columns=["Movie Name", "Genre", "Average Rating"])
+    return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values, table_heading="Recommendations")
+
+@app.route('/create_rating/<movie_name>', methods =["GET", "POST"])
+@login_required
+def create_rating(movie_name):
+    if request.method == "GET":
+        return render_template("create_rating.html", movie=movie_name)
+
+    new_rating = request.form.get("new_rating")
+    try:
+        db_helper.create_rating_query(str(current_user.id), str(movie_name), int(new_rating))
+    except:
+        return "Rating should be an integer between 0-10. Also you cannnot create new rating for a movie which you have already rated before. However, you can update your previous ratings. Please go back."
+
+    return redirect(url_for('ratings'))
 
 
 if __name__ == "__main__":

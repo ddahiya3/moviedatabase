@@ -11,6 +11,7 @@
 </head>
 <body>
     <h1>Your ratings</h1>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Go back</a>
     {% for rating in ratings %}
         <p>Movie Name: {{rating[0]}}</p>
         <p>Your Rating: {{rating[1]}}</p>

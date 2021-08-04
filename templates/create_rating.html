@@ -10,10 +10,15 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1><strong>{{table_heading}}</strong></h1>
-{% for table in tables %}
-    {{ table|safe }}
-{% endfor %}
-<a href="{{ url_for('index') }}" class="btn btn-primary">Go back to Home Page</a>
+    <h1>Create Rating</h1>
+    <p>Movie Name: {{movie}}</p>
+
+    <form action={{url_for('create_rating', movie_name = movie)}} method="post">
+        <div class="form-group">
+          <label for="new_rating">Rating:</label>
+          <input type="number" class="form-control" placeholder="Enter rating" name="new_rating">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Rating</button>
+        <a href="{{ url_for('search') }}" class="btn btn-primary">Go back to Search</a>
+    </form>
 </body>
-</html>

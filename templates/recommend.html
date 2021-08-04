@@ -10,18 +10,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Advanced Query 1</h1>
-    <p>Description: Selecting movies created by certain directors whose name starts with desired letters. (UNION operation)</p>
-    <form action="aq1", method="post">
+    <h1>Recommendation (Stored Procedure)</h1>
+    <p>Description: Enter your friend's username to find movie recommendations based on what you both like!</p>
+    <form role="form" action="{{ url_for('recommend_sp') }}" method="post">
         <div class="form-group">
-          <label for="dl1">choice 1:</label>
-          <input type="text" class="form-control" placeholder="Enter choice 1" name="dl1">
+          <label for="uname">Friend username:</label>
+          <input type="text" class="form-control" placeholder="Friend username" name="uname">
         </div>
-        <div class="form-group">
-          <label for="dl2">choice 2:</label>
-          <input type="text" class="form-control" placeholder="Enter choice 2" name="dl2">
-        </div>
-        <button type="submit" class="btn btn-primary">Run Query</button>
+        <button type="submit" class="btn btn-primary">Get Recommendations</button>
         <a href="{{ url_for('index') }}" class="btn btn-primary">Go back</a>
     </form>
 </body>

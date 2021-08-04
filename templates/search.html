@@ -9,19 +9,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
+
 <body>
-    <h1>Advanced Query 1</h1>
-    <p>Description: Selecting movies created by certain directors whose name starts with desired letters. (UNION operation)</p>
-    <form action="aq1", method="post">
-        <div class="form-group">
-          <label for="dl1">choice 1:</label>
-          <input type="text" class="form-control" placeholder="Enter choice 1" name="dl1">
+    <h4><strong>Search for Movies here</strong></h4>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form role="form" action="{{ url_for('search') }}" method = "post">
+                    <div class="form-group">
+                        <label for="movieName">Movie Name</label>
+                        <input type="text" class="form-control" id="movieName" name = "movieName">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="dl2">choice 2:</label>
-          <input type="text" class="form-control" placeholder="Enter choice 2" name="dl2">
-        </div>
-        <button type="submit" class="btn btn-primary">Run Query</button>
         <a href="{{ url_for('index') }}" class="btn btn-primary">Go back</a>
-    </form>
-</body>
+    </div>
+  </body>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>App name</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h1>Search results</h1>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Movie</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Runtime</th>
+            <th scope="col">Average Rating</th>
+            <th scope="col">Add Rating</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <td>{{result[0]}}</td>
+                    <td>{{result[1]}}</td>
+                    <td>{{result[2]}}</td>
+                    <td>{{result[3]}}</td>
+                    <td><a href='/create_rating/{{result[0]}}'>Create Rating</a></td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+</body>
+</html>
